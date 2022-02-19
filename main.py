@@ -1,5 +1,6 @@
 import curses
 from curses import wrapper
+import time
 
 def start_screen(stdscr):
     stdscr.clear()
@@ -22,22 +23,28 @@ def wpm_test(stdscr):
     target_text = 'Nao entre em panico!'
     current_text = []
     wpm = 0
+    start_time = time.time()
+    stdscr.nodelay(True)
     
     while True:
-        stdscr.clear()
-        
-        display_text(stdscr, target_text, current_text, wpm)
+        time_elapsed = max(time.time() - start_time, 1)
+        wpm = round((len(current_text) / (time_elapsed / 60)) / 5)
 
+        stdscr.clear()
+        display_text(stdscr, target_text, current_text, wpm)
         stdscr.refresh()
 
-        key = stdscr.getkey()
+        try:
+            key = stdscr.getkey()
+        except:
+            continue
 
         if ord(key) == 27:
             break
         if key in ("KEY_BACKSPACE", '\b', "\x7f"):
             if len(current_text) > 0:
                 current_text.pop()
-        elif len(current_text) > len(target_text):
+        elif len(target_text) > len(current_text):
             current_text.append(key)
 
 def main(stdscr):

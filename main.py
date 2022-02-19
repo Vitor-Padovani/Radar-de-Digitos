@@ -12,7 +12,7 @@ def start_screen(stdscr):
 
 def display_text(stdscr, target, current, wpm=0):
     stdscr.addstr(target)
-    stdscr.addstr(1, 0, f'WPM: {wpm}')
+    stdscr.addstr(1, 0, f'Caracteres por Minuto (CPM): {wpm}')
 
     for i, char in enumerate(current):
         if char == target[i]:

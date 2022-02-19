@@ -1,11 +1,12 @@
 import curses
 from curses import wrapper
 import time
+import random
 
 def start_screen(stdscr):
     stdscr.clear()
     stdscr.addstr('Bem-Vindo ao Teste de Velocidade de Digitação!')
-    stdscr.addstr('\nAperte qualquer tecla.')
+    stdscr.addstr('\nAperte qualquer tecla. (ESC para sair)')
     stdscr.refresh()
     stdscr.getkey()
 
@@ -19,8 +20,13 @@ def display_text(stdscr, target, current, wpm=0):
         else:
             stdscr.addstr(0, i, char, curses.color_pair(2))
 
+def load_text():
+    with open('frases.txt', 'r') as f:
+        lines = f.readlines()
+        return random.choice(lines).strip()
+
 def wpm_test(stdscr):
-    target_text = 'casa suja chao sujo'
+    target_text = load_text()
     current_text = []
     wpm = 0
     start_time = time.time()
@@ -60,7 +66,7 @@ def main(stdscr):
     while True:
         wpm_test(stdscr)
 
-        stdscr.addstr(2, 0, 'Você completou o teste! Aperte alguma tecla para continuar.')
+        stdscr.addstr(2, 0, 'Você completou o teste! Aperte alguma tecla para continuar. (ESC para sair)')
         key = stdscr.getkey()
         if ord(key) == 27:
             break
